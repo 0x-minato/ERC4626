@@ -80,7 +80,6 @@ pub trait IERC4626Camel<TState> {
 
 #[starknet::interface]
 pub trait IERC4626Snake<TState> {
-    fn total_supply(self: @TState) -> u256;
     fn balance_of(self: @TState, account: ContractAddress) -> u256;
     fn allowance(self: @TState, owner: ContractAddress, spender: ContractAddress) -> u256;
     fn transfer(ref self: TState, recipient: ContractAddress, amount: u256) -> bool;
@@ -109,6 +108,7 @@ pub trait IERC4626Additional<TState> {
         ref self: TState, shares: u256, receiver: ContractAddress, owner: ContractAddress
     ) -> u256;
     fn total_assets(self: @TState) -> u256;
+    fn total_supply(self: @TState) -> u256;
     fn withdraw(
         ref self: TState, assets: u256, receiver: ContractAddress, owner: ContractAddress
     ) -> u256;

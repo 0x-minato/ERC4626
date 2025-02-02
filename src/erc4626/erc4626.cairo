@@ -102,7 +102,7 @@ pub mod ERC4626Component {
     #[embeddable_as(ERC4626AdditionalImpl)]
     impl ERC4626Additional<
         TContractState, +HasComponent<TContractState>,
-        +ERC20Component::HasComponent<TContractState>,
+        impl erc20: ERC20Component::HasComponent<TContractState>,
         +SRC5Component::HasComponent<TContractState>,
         +ERC4626HooksTrait<TContractState>,
         +Drop<TContractState>
@@ -191,6 +191,11 @@ pub mod ERC4626Component {
             dispatcher.balanceOf(get_contract_address())
         }
 
+        fn total_supply(self: @ComponentState<TContractState>) -> u256 {
+            let erc20_comp = get_dep_component!(ref self, erc20);
+            erc20_comp.total_supply()
+        }
+
         fn withdraw(
             ref self: ComponentState<TContractState>, assets: u256, receiver: ContractAddress, owner: ContractAddress
         ) -> u256 {
@@ -235,11 +240,6 @@ pub mod ERC4626Component {
         +ERC4626HooksTrait<TContractState>,
         +Drop<TContractState>
     > of IERC4626Snake<ComponentState<TContractState>> {
-        fn total_supply(self: @ComponentState<TContractState>) -> u256 {
-            let erc20_comp = get_dep_component!(ref self, erc20);
-            erc20_comp.total_supply()
-        }
-
         fn balance_of(self: @ComponentState<TContractState>, account: ContractAddress) -> u256 {
             let erc20_comp = get_dep_component!(ref self, erc20);
             erc20_comp.balance_of(account)
